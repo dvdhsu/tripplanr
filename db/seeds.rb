@@ -29,4 +29,7 @@ u.save!
 
 end
   
-
+london = City.create!(
+  name: "London",
+  address: "London, UK",
+)

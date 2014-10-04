@@ -3,7 +3,7 @@ class CreateCities < ActiveRecord::Migration
     create_table :cities do |t|
       t.string :name
       t.string :address
-      t.float :latitutde
+      t.float :latitude
       t.float :longitude
 
       t.timestamps
