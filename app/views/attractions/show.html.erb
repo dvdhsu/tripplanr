@@ -1,0 +1,40 @@
+<% title "Attraction" %>
+
+<p>
+  <strong>Latitude:</strong>
+  <%= @attraction.latitude %>
+</p>
+<p>
+  <strong>Longitude:</strong>
+  <%= @attraction.longitude %>
+</p>
+<p>
+  <strong>Address:</strong>
+  <%= @attraction.address %>
+</p>
+<p>
+  <strong>Title:</strong>
+  <%= @attraction.title %>
+</p>
+<p>
+  <strong>Body:</strong>
+  <%= @attraction.body %>
+</p>
+<p>
+  <strong>Time:</strong>
+  <%= @attraction.time %>
+</p>
+<p>
+  <strong>Cost Cents:</strong>
+  <%= @attraction.cost_cents %>
+</p>
+<p>
+  <strong>City:</strong>
+  <%= @attraction.city_id %>
+</p>
+
+<p>
+  <%= link_to "Edit", edit_attraction_path(@attraction) %> |
+  <%= link_to "Destroy", @attraction, :confirm => 'Are you sure?', :method => :delete %> |
+  <%= link_to "View All", attractions_path %>
+</p>

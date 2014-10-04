@@ -1,0 +1,31 @@
+<% title "Attractions" %>
+
+<table>
+  <tr>
+    <th>Latitude</th>
+    <th>Longitude</th>
+    <th>Address</th>
+    <th>Title</th>
+    <th>Body</th>
+    <th>Time</th>
+    <th>Cost Cents</th>
+    <th>City</th>
+  </tr>
+  <% for attraction in @attractions %>
+    <tr>
+      <td><%= attraction.latitude %></td>
+      <td><%= attraction.longitude %></td>
+      <td><%= attraction.address %></td>
+      <td><%= attraction.title %></td>
+      <td><%= attraction.body %></td>
+      <td><%= attraction.time %></td>
+      <td><%= attraction.cost_cents %></td>
+      <td><%= attraction.city_id %></td>
+      <td><%= link_to "Show", attraction %></td>
+      <td><%= link_to "Edit", edit_attraction_path(attraction) %></td>
+      <td><%= link_to "Destroy", attraction, :confirm => 'Are you sure?', :method => :delete %></td>
+    </tr>
+  <% end %>
+</table>
+
+<p><%= link_to "New Attraction", new_attraction_path %></p>

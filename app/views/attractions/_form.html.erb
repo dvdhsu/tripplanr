@@ -1,0 +1,35 @@
+<%= form_for @attraction do |f| %>
+  <p>
+    <%= f.label :latitude %><br />
+    <%= f.text_field :latitude %>
+  </p>
+  <p>
+    <%= f.label :longitude %><br />
+    <%= f.text_field :longitude %>
+  </p>
+  <p>
+    <%= f.label :address %><br />
+    <%= f.text_field :address %>
+  </p>
+  <p>
+    <%= f.label :title %><br />
+    <%= f.text_field :title %>
+  </p>
+  <p>
+    <%= f.label :body %><br />
+    <%= f.text_field :body %>
+  </p>
+  <p>
+    <%= f.label :time %><br />
+    <%= f.text_field :time %>
+  </p>
+  <p>
+    <%= f.label :cost_cents %><br />
+    <%= f.text_field :cost_cents %>
+  </p>
+  <p>
+    <%= f.label :city_id %><br />
+    <%= f.text_field :city_id %>
+  </p>
+  <p><%= f.submit %></p>
+<% end %>
