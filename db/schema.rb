@@ -11,7 +11,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141004175228) do
+ActiveRecord::Schema.define(version: 20141004181527) do
+
+  create_table "attractions", force: true do |t|
+    t.float    "latitude"
+    t.float    "longitude"
+    t.string   "address"
+    t.string   "title"
+    t.string   "body"
+    t.integer  "time"
+    t.integer  "cost_cents"
+    t.integer  "city_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "attractions", ["city_id"], name: "index_attractions_on_city_id"
 
   create_table "cities", force: true do |t|
     t.string   "name"
