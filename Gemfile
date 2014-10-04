@@ -10,6 +10,7 @@ gem 'jbuilder', '2.1.3'
 gem 'bcrypt', '3.1.7'
 gem 'jquery-turbolinks'
 gem 'geocoder'
+gem 'nifty-generators'
 
 group :doc do
   gem 'sdoc', require: false
@@ -40,3 +41,5 @@ group :development, :test do
 end
 
 gem 'bootstrap-sass', '3.2.0.2'
+
+gem "mocha", group: :test
