@@ -5,6 +5,7 @@ class CitiesController < ApplicationController
 
   def show
     @city = City.find(params[:id])
+    @attractions = City.attractions
   end
 
   def new
