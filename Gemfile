@@ -11,6 +11,7 @@ gem 'bcrypt', '3.1.7'
 gem 'jquery-turbolinks'
 gem 'geocoder'
 gem 'nifty-generators'
+gem 'google_places'
 
 group :doc do
   gem 'sdoc', require: false
