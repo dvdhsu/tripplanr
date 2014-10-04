@@ -5,7 +5,7 @@ class CitiesController < ApplicationController
 
   def show
     @city = City.find(params[:id])
-    @attractions = City.attractions
+    @attractions = @city.attractions
   end
 
   def new
