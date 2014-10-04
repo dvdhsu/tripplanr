@@ -11,7 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131103142223) do
+ActiveRecord::Schema.define(version: 20141004175228) do
+
+  create_table "cities", force: true do |t|
+    t.string   "name"
+    t.string   "address"
+    t.float    "latitutde"
+    t.float    "longitude"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "friendly_id_slugs", force: true do |t|
     t.string   "slug",                      null: false
