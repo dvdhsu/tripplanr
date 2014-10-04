@@ -1,0 +1,47 @@
+    <section class="categories">
+      <h1>
+        Attractions in
+        <%= @city %></h1>
+      <div class="col-sm-4">
+        <a href = "#museums">
+          <h2>Museums</h2>
+        </a>
+        <br>
+        <a href = "#parks">
+          <h2>Parks</h2>
+        </a>
+      </div>
+      <div class="col-sm-4">
+        <a href = "#clubs">
+          <h2>Clubs</h2>
+        </a>
+        <br>
+        <a href = "#other">
+          <h2>Other</h2>
+        </a>
+      </div>
+    </section>
+
+    <section class="attractions">
+      <a name ="museums">
+      <% for attraction in @city %>
+
+      <h2>
+        <%= attraction.title %>
+        <small>
+          <%= attraction.address %></small>
+      </h2>
+      <p>
+        <%= attraction.body %></p>
+      <p>
+        Time:
+        <label class="label label-default">
+          <%= attraction.time %></label>
+      </p>
+      <p>
+        Cost:
+        <label class="label label-default">
+          <%= attraction.cost_cents %></label>
+      </p>
+    </tr>
+    <% end %></section>

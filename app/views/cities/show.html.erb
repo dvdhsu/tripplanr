@@ -1,0 +1,45 @@
+<% title "City" %>
+
+<p>
+  <strong>Name:</strong>
+  <%= @city.name %>
+</p>
+<p>
+  <strong>Address:</strong>
+  <%= @city.address %>
+</p>
+<p>
+  <strong>Latitude:</strong>
+  <%= @city.latitude %>
+</p>
+<p>
+  <strong>Longitude:</strong>
+  <%= @city.longitude %>
+</p>
+
+<p>
+  <%= link_to "Edit", edit_city_path(@city) %> |
+  <%= link_to "Destroy", @city, :confirm => 'Are you sure?', :method => :delete %> |
+  <%= link_to "View All", cities_path %>
+</p>
+
+<style type="text/css">
+  @import url(http://fonts.googleapis.com/css?family=Raleway:700);
+</style>
+<header class = "<%= @city %>
+  jumbotron">
+
+  <p>
+    Place of residence:
+    <input type = "text" name = "location">
+    <input type="submit" name="Submit"></p>
+</header>
+<div class="main-container">
+  <div class="col-sm-9 city">
+</div>
+<div class="col-sm-3 map">
+  <p>Estimated Time:</p>
+  <p>Cost:</p>
+</div>
+</div>
+
