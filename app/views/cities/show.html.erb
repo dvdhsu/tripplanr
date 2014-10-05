@@ -1,27 +1,11 @@
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+<%= stylesheet_link_tag "flatly" %>
+
 <% title "City" %>
 
-<p>
-  <strong>Name:</strong>
+<h1>
   <%= @city.name %>
-</p>
-<p>
-  <strong>Address:</strong>
-  <%= @city.address %>
-</p>
-<p>
-  <strong>Latitude:</strong>
-  <%= @city.latitude %>
-</p>
-<p>
-  <strong>Longitude:</strong>
-  <%= @city.longitude %>
-</p>
-
-<p>
-  <%= link_to "Edit", edit_city_path(@city) %> |
-  <%= link_to "Destroy", @city, :confirm => 'Are you sure?', :method => :delete %> |
-  <%= link_to "View All", cities_path %>
-</p>
+</h1>
 
 <style type="text/css">
   @import url(http://fonts.googleapis.com/css?family=Raleway:700);
@@ -65,13 +49,13 @@
         });
 
 var markers = [];
-  var list = $("#attractionList li");
-  list.each(function(idx, li) {
-     if($("input").is(':checked')) {
-      var latLng = new google.maps.LatLng($("input").attr("data-longitude"),
-                  $("input").attr("data-longitude"));
+  var list = $("#attraction-list .panel-group input");
+  list.each(function(idx, input) {
+     if($(input).is(':checked')) {
+      var latLng = new google.maps.LatLng($(input).attr("data-longitude"),
+                  $(input).attr("data-longitude"));
       var marker = new google.maps.Marker({
-                title: $("input").attr("title"),
+                title: $(input).attr("title"),
                 position: latLng
           });
     
@@ -107,8 +91,37 @@ var mcOptions = {gridSize: 50, maxZoom: 15};
 
     </script>
 <div id="map-canvas"></div>
+
+<div class="container">
+  <div class="col-sm-9 attractions">
+    <h2>Attractions</h2>
+    <div class="attraction-list">
+      <div class="panel-group" id="accordion">
+        <% for i in 1...@attractions.length %>
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <input type="checkbox" id=<%= "attraction_" + @attractions[i].id.to_s %>
+                  data-lat="<%= @attractions[i].latitude %>" data-long="<%= @attractions[i].longitude %>
+                  value="true">
+                <a data-toggle="collapse" data-parent="#accordion" href="<%= "#collapse_" + i.to_s %>">
+                  <%= @attractions[i].title %>
+                </a>
+              </h4>
+            </div>
+            <div id="<%= "collapse_" + i.to_s %>" class="panel-collapse collapse">
+              <div class="panel-body">
+                <%= @attractions[i].body %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-3 map">
+    <h2>Calculations</h2>
     <p>Estimated Time:</p>
     <p>Cost:</p>
   </div>
 </div>
-
