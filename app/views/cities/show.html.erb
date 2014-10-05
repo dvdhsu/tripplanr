@@ -3,14 +3,16 @@
 
 <% title "City" %>
 
-<h1>
-  <%= @city.name %>
-</h1>
+
 
 <style type="text/css">
   @import url(http://fonts.googleapis.com/css?family=Raleway:700);
+
 </style>
 <header class = "<%= @city %> jumbotron">
+<h1>
+  <%= @city.name %>
+</h1>
   <p>
     <form>Where are you staying?
     <input type = "text" class = "form-control" id="address" name = "location" style="width: 50%; margin-bottom: 10px;">
@@ -40,35 +42,70 @@
       function initialize() {
           geocoder = new google.maps.Geocoder();
 
-        var center = new google.maps.LatLng(37.4419, -122.1419);
+        var center = new google.maps.LatLng("<%= @city.latitude %> ", "<%= @city.longitude %>");
 
         map = new google.maps.Map(document.getElementById('map-canvas'), {
-          zoom: 3,
+          zoom: 12,
           center: center,
           mapTypeId: google.maps.MapTypeId.ROADMAP
         });
 
-var markers = [];
-  var list = $("#attraction-list .panel-group input");
-  list.each(function(idx, input) {
-     if($(input).is(':checked')) {
-      var latLng = new google.maps.LatLng($(input).attr("data-longitude"),
-                  $(input).attr("data-longitude"));
-      var marker = new google.maps.Marker({
-                title: $(input).attr("title"),
-                position: latLng
-          });
+//   var markers = [];
+//   var list = $(".attraction-list .panel-group input");
+//   list.each(function(idx, input) {
+//     console.log($(input));
+//      if($(input).is(':checked')) {
+//       var latLng = new google.maps.LatLng($(input).attr("data-lat"),
+//                   $(input).attr("data-long"));
+//       var marker = new google.maps.Marker({
+//                 title: $(input).attr("title"),
+//                 position: latLng
+//           });
     
-    markers.push(marker); 
-    google.maps.event.addListener(markers[i], 'click', (function(marker, i) {
+//     markers.push(marker); 
+//     google.maps.event.addListener(markers[i], 'click', (function(marker, i) {
+//         return function() {
+//           infowindow.setContent($("input").attr("title"));
+//           infowindow.open(map, marker);
+//         }
+//       })(marker, i));
+//   }
+// });
+var id;
+
+var markers = {};
+
+    $(":checkbox").change(function() {
+      if (($(this)).is(':checked')) {
+        // add it
+        console.log($(this) + "checked")
+        var latLng = new google.maps.LatLng($(this).attr("data-lat"),
+                  $(this).attr("data-long"));
+        var marker = new google.maps.Marker({
+                  map: map,
+                  position: latLng
+            });
+        map.panTo(latLng);
+    id = $(this).attr("id");
+    markers[id] = marker; 
+    console.log(markers);
+    google.maps.event.addListener(marker, 'click', (function() {
         return function() {
-          infowindow.setContent($("input").attr("title"));
+          infowindow.setContent($(this).next().text());
           infowindow.open(map, marker);
         }
-      })(marker, i));
-  }
-});
-          
+      }));
+      }
+      else {
+        //remove it 
+        console.log($(this) + "unchecked")
+        id = $(this).attr("id");        
+        marker = markers[id]; 
+        marker.setMap(null);
+        console.log(markers);
+
+      }
+    }) ;
 var mcOptions = {gridSize: 50, maxZoom: 15};
 
         var markerCluster = new MarkerClusterer(map, markers, mcOptions);
@@ -125,3 +162,4 @@ var mcOptions = {gridSize: 50, maxZoom: 15};
     <p>Cost:</p>
   </div>
 </div>
+</div></div>
