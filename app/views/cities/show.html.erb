@@ -28,16 +28,57 @@
 </style>
 <header class = "<%= @city %> jumbotron">
   <p>
-    Place of residence:
+    <form>Place of residence:
     <input type = "text" name = "location">
-    <input type="submit" name="Submit">
+    <input type="submit" id="submit" name="Submit"></form>
   </p>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=AIzaSyDDNUS-k1NvxtyV_2Q_xNIJ1H15kmhjEFM&libraries=places"></script>
+<script type="text/javascript">console.log(json.results);</script>
 </header>
 
+
 <div class="main-container">
-  <div class="col-sm-9 attractions">
+  <div class="col-sm-6 attractions">
+  <!-- panel.html.erb -->
+
   </div>
-  <div class="col-sm-3 map">
+  <div class="col-sm-12 map">
+<!-- map.html.erb -->
+<style type="text/css">#map-canvas { height: 400px; margin: 0; padding: 0;}</style>
+  <script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDDNUS-k1NvxtyV_2Q_xNIJ1H15kmhjEFM&libraries=places&sensor=false"></script>
+  <script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/src/data.json"></script>
+    <script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/src/markerclusterer_compiled.js"></script>
+
+  <script type="text/javascript">
+      function initialize() {
+        var center = new google.maps.LatLng(37.4419, -122.1419);
+
+        var map = new google.maps.Map(document.getElementById('map-canvas'), {
+          zoom: 3,
+          center: center,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+
+          var markers = [];
+        for (var i = 0; i < 100; i++) {
+              var dataPhoto = data.photos[i];
+              var latLng = new google.maps.LatLng(dataPhoto.latitude,
+                  dataPhoto.longitude);
+              var marker = new google.maps.Marker({
+                title: dataPhoto.photo_title,
+                position: latLng
+          });
+          markers.push(marker); }
+          console.log(data.photos);
+var mcOptions = {gridSize: 50, maxZoom: 15};
+
+        var markerCluster = new MarkerClusterer(map, markers, mcOptions);
+      }
+      google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+<div id="map-canvas"></div>
     <p>Estimated Time:</p>
     <p>Cost:</p>
   </div>
