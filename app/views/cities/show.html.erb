@@ -102,7 +102,7 @@ var mcOptions = {gridSize: 50, maxZoom: 15};
             <div class="panel-heading">
               <h4 class="panel-title">
                 <input type="checkbox" id=<%= "attraction_" + @attractions[i].id.to_s %>
-                  data-lat="<%= @attractions[i].latitude %>" data-long="<%= @attractions[i].longitude %>
+                  data-lat="<%= @attractions[i].latitude %>" data-long="<%= @attractions[i].longitude %>"
                   value="true">
                 <a data-toggle="collapse" data-parent="#accordion" href="<%= "#collapse_" + i.to_s %>">
                   <%= @attractions[i].title %>
