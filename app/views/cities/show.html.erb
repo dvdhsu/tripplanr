@@ -9,35 +9,86 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDDNUS-k1NvxtyV_2Q_xNIJ1H1
 <% title "City" %>
 
 <style type="text/css">
-  @import url(http://fonts.googleapis.com/css?family=Raleway:700);
 
+@import url(http://fonts.googleapis.com/css?family=Raleway:700);
+.col-sm-6 {
+  padding-bottom: 40px;
+}
+
+.container {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+.initialInputs {
+  padding: 5%;
+}
+.accordion-inner {
+  margin: 0 10%;
+}
+.panel .panel-default {
+  margin-bottom: 5px;
+}
+.museums {
+  margin: 2.5% 2.5%;
+}
 </style>
-<div class="container">
-  <h1>
-    <%= @city.name %>
-  </h1>
-  <div class="initialInputs">
-    <div class="col-sm-6">
-      <label for="startPoint" class="control-label">Starting point: </label>
-      <input type="text" class="form-control" id="startPoint">
-    </div>
-    <div class="col-sm-6">
-      <label for="endPoint" class="control-label">Ending point: </label>
-      <input type="text" class="form-control" id="endPoint">
+
+  <div class="container" style="background-image: url('/assets/pano.png'); background-size: cover; background-position:center 0px;">
+    
+    <div class="initialInputs">
+    <h1>
+      <%= @city.name %>
+    </h1>
+      <div class="col-sm-6">
+        <label for="startPoint" class="control-label">Starting point: </label>
+        <input type="text" class="form-control" id="startPoint">
+      </div>
+      <div class="col-sm-6">
+        <label for="endPoint" class="control-label">Ending point: </label>
+        <input type="text" class="form-control" id="endPoint">
+      </div>
     </div>
   </div>
 </div>
 
 <div class="main-container">
-  <div class="col-sm-6 attractions">
-    <!-- panel.html.erb -->
+  <!-- <div class="col-sm-6 attractions">
+    
 
-  </div>
+  </div> -->
   <div class="col-sm-12 map">
-    <!-- map.html.erb -->
     <style type="text/css">#map-canvas { height: 400px; margin: 0; padding: 0;}</style>
     <div id="map-canvas"></div>
 
+<!-- <div class="panel panel-default accordion" id="accordion1">
+  <div class=" panel panel-default  accordion-group">
+    <div class="panel-heading accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOne">
+      Museums
+      </a>
+    </div>
+    <div id="collapseOne" class="accordion-body collapse in">
+      <div class="accordion-inner">
+      </div>
+    </div>
+  </div>
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseTwo">
+        Parks
+      </a>
+    </div>
+    <div id="collapseTwo" class="accordion-body collapse">
+      <div class="accordion-inner">
+              
+        Inner accordion ends here
+
+      </div>
+    </div>
+  </div>
+</div>
+ -->
     <div class="container">
       <div class="col-sm-9 attractions">
         <h2>Destinations</h2>
@@ -100,6 +151,7 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDDNUS-k1NvxtyV_2Q_xNIJ1H1
       var center = new google.maps.LatLng("<%= @city.latitude %> ", "<%= @city.longitude %>");
       map = new google.maps.Map(document.getElementById('map-canvas'), {
         zoom: 12,
+        scrollwheel: false,
         center: center,
         mapTypeId: google.maps.MapTypeId.ROADMAP
       });
@@ -108,7 +160,6 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDDNUS-k1NvxtyV_2Q_xNIJ1H1
       $(":checkbox").change(function() {
         if (($(this)).is(':checked')) {
           // add marker
-          console.log($(this) + "checked")
           var latLng = new google.maps.LatLng($(this).attr("data-lat"),
             $(this).attr("data-long"));
 
@@ -149,7 +200,7 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDDNUS-k1NvxtyV_2Q_xNIJ1H1
           console.log("found it at " + index);
           if (index > -1) {
             waypointsIDs.splice(index, 1);
-            waypoints.splice(index, 1);
+            waypointsIDs.splice(index, 1);
           }
           console.log("length of waypoints is " + waypointsIDs.length);
         }
@@ -182,6 +233,9 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDDNUS-k1NvxtyV_2Q_xNIJ1H1
               summaryPanel.innerHTML += route.legs[i].end_address + '<br>';
               summaryPanel.innerHTML += route.legs[i].distance.text + '<br><br>';
             }
+            summaryPanel.innerHTML += route.legs.reduce(function(prev, curr, index, array) {
+              return prev.distance.value + curr.distance.value;
+            });
           }
         });
       });
