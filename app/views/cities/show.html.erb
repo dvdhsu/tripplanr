@@ -6,28 +6,27 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDDNUS-k1NvxtyV_2Q_xNIJ1H1
 <script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/src/data.json"></script>
 <script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/src/markerclusterer_compiled.js"></script>
 
-
 <% title "City" %>
 
 <style type="text/css">
-@import url(http://fonts.googleapis.com/css?family=Raleway:700);
+  @import url(http://fonts.googleapis.com/css?family=Raleway:700);
 
 </style>
-  <div class="container">
-    <h1>
-      <%= @city.name %>
-    </h1>
-    <div class="initialInputs">
-      <div class="col-sm-6">
-        <label for="startPoint" class="control-label">Starting point: </label>
-        <input type="text" class="form-control" id="startPoint">
-      </div>
-      <div class="col-sm-6">
-        <label for="endPoint" class="control-label">Ending point: </label>
-        <input type="text" class="form-control" id="endPoint">
-      </div>
+<div class="container">
+  <h1>
+    <%= @city.name %>
+  </h1>
+  <div class="initialInputs">
+    <div class="col-sm-6">
+      <label for="startPoint" class="control-label">Starting point: </label>
+      <input type="text" class="form-control" id="startPoint">
+    </div>
+    <div class="col-sm-6">
+      <label for="endPoint" class="control-label">Ending point: </label>
+      <input type="text" class="form-control" id="endPoint">
     </div>
   </div>
+</div>
 
 <div class="main-container">
   <div class="col-sm-6 attractions">
@@ -41,15 +40,15 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDDNUS-k1NvxtyV_2Q_xNIJ1H1
 
     <div class="container">
       <div class="col-sm-9 attractions">
-        <h2>Attractions</h2>
+        <h2>Destinations</h2>
         <div class="attraction-list">
           <div class="panel-group" id="accordion">
             <% for i in 1...@attractions.length %>
-              <div class="panel panel-default">
+            <div class="panel panel-default">
               <div class="panel-heading">
                 <h4 class="panel-title">
                   <input type="checkbox" id=<%= "attraction_" + @attractions[i].id.to_s %>
-                data-lat="<%= @attractions[i].latitude %>" data-long="<%= @attractions[i].longitude %>"
+                  data-lat="<%= @attractions[i].latitude %>" data-long="<%= @attractions[i].longitude %>"
                   value="true">
                   <a data-toggle="collapse" data-parent="#accordion" href="<%= "#collapse_" + i.to_s %>">
                     <%= @attractions[i].title %>
@@ -62,104 +61,140 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDDNUS-k1NvxtyV_2Q_xNIJ1H1
                 </div>
               </div>
             </div>
-          <% end %>
+            <% end %>
           </div>
         </div>
       </div>
       <div class="col-sm-3">
-        <h2>Calculations</h2>
+        <h2>Itinerary</h2>
         <p>Estimated Time:</p>
         <p>Cost:</p>
+        <div id="directions_panel" style="margin:20px;background-color:#FFEE77;"></div>
+    </div>
       </div>
     </div>
-</div></div>
-<script>
-  var geocoder;
-  var map;
-  function initialize() {
-    geocoder = new google.maps.Geocoder();
+  </div></div>
+  <script>
+    var geocoder;
+    var map;
+    var id;
+    var markers = {};
+    var directionsDisplay;
+    var directionsService = new google.maps.DirectionsService();
+    var waypointsIDs = [];
+    var waypoints = [];
 
-    var center = new google.maps.LatLng("<%= @city.latitude %> ", "<%= @city.longitude %>");
 
-    map = new google.maps.Map(document.getElementById('map-canvas'), {
-      zoom: 12,
-      center: center,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    });
-
-//   var markers = [];
-//   var list = $(".attraction-list .panel-group input");
-//   list.each(function(idx, input) {
-//     console.log($(input));
-//      if($(input).is(':checked')) {
-//       var latLng = new google.maps.LatLng($(input).attr("data-lat"),
-//                   $(input).attr("data-long"));
-//       var marker = new google.maps.Marker({
-//                 title: $(input).attr("title"),
-//                 position: latLng
-//           });
-
-//     markers.push(marker); 
-//     google.maps.event.addListener(markers[i], 'click', (function(marker, i) {
-//         return function() {
-//           infowindow.setContent($("input").attr("title"));
-//           infowindow.open(map, marker);
-//         }
-//       })(marker, i));
-//   }
-// });
-var id;
-
-var markers = {};
-
-$(":checkbox").change(function() {
-  if (($(this)).is(':checked')) {
-    // add it
-    console.log($(this) + "checked")
-    var latLng = new google.maps.LatLng($(this).attr("data-lat"),
-      $(this).attr("data-long"));
-    var marker = new google.maps.Marker({
-      map: map,
-      position: latLng
-    });
-    id = $(this).attr("id");
-    markers[id] = marker; 
-    console.log(markers);
-    var infowindow = new google.maps.InfoWindow({
-      content: $(this).next().text()
-  });
-    google.maps.event.addListener(marker, 'click', (function() {
-          infowindow.open(map, marker);
-      }));
-      }
-  else {
-  //remove it 
-  console.log($(this) + "unchecked")
-  id = $(this).attr("id");        
-  marker = markers[id]; 
-  marker.setMap(null);
-  console.log(markers);
-
-}
-}) ;
-var mcOptions = {gridSize: 50, maxZoom: 15};
-
-var markerCluster = new MarkerClusterer(map, markers, mcOptions);
-
-}
-function codeAddress() {
-  var address = document.getElementById('address').value;
-  geocoder.geocode( { 'address': address}, function(results, status) {
-    if (status == google.maps.GeocoderStatus.OK) {
-      map.setCenter(results[0].geometry.location);
-      var marker = new google.maps.Marker({
-        position: results[0].geometry.location
+    function initialize() {
+      directionsDisplay = new google.maps.DirectionsRenderer();
+      geocoder = new google.maps.Geocoder();
+      var center = new google.maps.LatLng("<%= @city.latitude %> ", "<%= @city.longitude %>");
+      map = new google.maps.Map(document.getElementById('map-canvas'), {
+        zoom: 12,
+        center: center,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
       });
-    } else {
-      alert('Geocode was not successful: ' + status);
-    }
-  });
-}
-google.maps.event.addDomListener(window, 'load', initialize);
+        directionsDisplay.setMap(map);
 
-</script>
+      $(":checkbox").change(function() {
+        if (($(this)).is(':checked')) {
+          // add marker
+          console.log($(this) + "checked")
+          var latLng = new google.maps.LatLng($(this).attr("data-lat"),
+            $(this).attr("data-long"));
+
+          // add waypoint 
+          console.log("added id: " + $(this)[0].id);
+          waypointsIDs.push($(this)[0].id);
+          waypoints.push({
+            location: latLng,
+            stopover: true
+          });
+          console.log(waypointsIDs.length);
+
+          /** var marker = new google.maps.Marker({
+            map: map,
+            position: latLng
+          });
+          id = $(this).attr("id");
+          markers[id] = marker; 
+          console.log(markers);
+          var infowindow = new google.maps.InfoWindow({
+            content: $(this).next().text()
+          });
+          google.maps.event.addListener(marker, 'click', (function() {
+            infowindow.open(map, marker);
+         })); **/
+        }
+        else {
+      //remove it 
+          /** console.log($(this) + "unchecked")
+          console.log("the id is: " + id)
+          marker = markers[id]; 
+          marker.setMap(null);
+          console.log(markers); **/
+          id = $(this).attr("id");        
+
+          //remove from waypoints as well
+          index = waypointsIDs.indexOf(id);
+          console.log("found it at " + index);
+          if (index > -1) {
+            waypointsIDs.splice(index, 1);
+            waypoints.splice(index, 1);
+          }
+          console.log("length of waypoints is " + waypointsIDs.length);
+        }
+
+        // no matter what, update navigation
+        var startPoint = $('#startPoint').val();
+        var endPoint = $('#endPoint').val();
+
+        var request = {
+          origin: startPoint,
+          destination: endPoint,
+          waypoints: waypoints,
+          optimizeWaypoints: true,
+          travelMode: google.maps.TravelMode.DRIVING
+        };
+
+        console.log("request is " + request)
+        directionsService.route(request, function(response, status) {
+            console.log("status is: " + status);
+          if (status == google.maps.DirectionsStatus.OK) {
+            directionsDisplay.setDirections(response);
+            console.log("response is: " + response);
+            var route = response.routes[0];
+            var summaryPanel = document.getElementById('directions_panel');
+            summaryPanel.innerHTML = '';
+            for (var i = 0; i < route.legs.length; i++) {
+              var routeSegment = i + 1;
+              summaryPanel.innerHTML += '<b>Route Segment: ' + routeSegment + '</b><br>';
+              summaryPanel.innerHTML += route.legs[i].start_address + ' to ';
+              summaryPanel.innerHTML += route.legs[i].end_address + '<br>';
+              summaryPanel.innerHTML += route.legs[i].distance.text + '<br><br>';
+            }
+          }
+        });
+      });
+
+      var mcOptions = {gridSize: 50, maxZoom: 15};
+
+      var markerCluster = new MarkerClusterer(map, markers, mcOptions);
+
+    }
+    function codeAddress() {
+      var address = document.getElementById('address').value;
+      geocoder.geocode( { 'address': address}, function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+          map.setCenter(results[0].geometry.location);
+          var marker = new google.maps.Marker({
+            position: results[0].geometry.location
+          });
+        } else {
+          alert('Geocode was not successful: ' + status);
+        }
+      });
+    }
+    google.maps.event.addDomListener(window, 'load', initialize);
+
+  </script>
