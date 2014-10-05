@@ -125,13 +125,13 @@ $(":checkbox").change(function() {
     id = $(this).attr("id");
     markers[id] = marker; 
     console.log(markers);
+    var infowindow = new google.maps.InfoWindow({
+      content: $(this).next().text()
+  });
     google.maps.event.addListener(marker, 'click', (function() {
-      return function() {
-        infowindow.setContent($(this).next().text());
-        infowindow.open(map, marker);
+          infowindow.open(map, marker);
+      }));
       }
-    }));
-  }
   else {
   //remove it 
   console.log($(this) + "unchecked")
