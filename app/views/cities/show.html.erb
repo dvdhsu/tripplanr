@@ -233,9 +233,6 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDDNUS-k1NvxtyV_2Q_xNIJ1H1
               summaryPanel.innerHTML += route.legs[i].end_address + '<br>';
               summaryPanel.innerHTML += route.legs[i].distance.text + '<br><br>';
             }
-            summaryPanel.innerHTML += route.legs.reduce(function(prev, curr, index, array) {
-              return prev.distance.value + curr.distance.value;
-            });
           }
         });
       });
