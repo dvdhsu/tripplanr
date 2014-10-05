@@ -17,6 +17,8 @@ london = City.create!(
   address: "London, UK",
 )
 
+@client = GooglePlaces::Client.new(ENV["GOOGLE_API_KEY"])
+
 attraction_titles = [
   "Buckingham Palace",
   "London Eye",
@@ -187,11 +189,39 @@ attraction_times = [
 for i in 0...(attraction_titles.length)
   sleep 0.25
 
-  london.attractions.create!(
+  attrac = london.attractions.create!(
     address: attraction_titles[i] + ", London, UK",
     title: attraction_titles[i],
     body: attraction_bodies[i],
     tag: attraction_tags[i],
     time: attraction_times[i]
   )
+
+  if !attrac.latitude
+    attrac.destroy
+    next
+  end
+
+  puts attrac.latitude
+  puts attrac.longitude
+  puts attrac.title
+  place = @client.spots(attrac.latitude, attrac.longitude, name: attrac.title)[0]
+
+  begin
+    attrac.rating = place.rating
+  rescue
+    attrac.rating = 0
+  end
+
+  begin
+    puts place
+    photo_url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=" + place.photos[0].photo_reference + "&key=" + ENV["GOOGLE_API_KEY"]
+    puts photo_url
+    attrac.image_url = photo_url
+  rescue
+    attrac.image_url = ""
+  end
+  attrac.save
+
+
 end

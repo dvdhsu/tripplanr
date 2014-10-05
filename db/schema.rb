@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141005123620) do
+ActiveRecord::Schema.define(version: 20141005174141) do
 
   create_table "attractions", force: true do |t|
     t.float    "latitude"
@@ -25,6 +25,8 @@ ActiveRecord::Schema.define(version: 20141005123620) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "tag"
+    t.float    "rating"
+    t.string   "image_url"
   end
 
   add_index "attractions", ["city_id"], name: "index_attractions_on_city_id"

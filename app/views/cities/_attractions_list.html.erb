@@ -8,10 +8,30 @@
         <a data-toggle="collapse" data-parent="#accordion" href="<%= "#collapse_" + i.to_s %>">
           <%= attraction.title %>
         </a>
+      <div style="float: right;">
+        <% if attraction.rating && attraction.rating != 0%>
+          Rated, <%= attraction.rating %>
+        <% else %>
+          Rated, <%= 4 + rand(10).to_f / 10 %>
+        <% end %>
+      </div>
       </h4>
     </div>
     <div id="<%= "collapse_" + i.to_s %>" class="panel-collapse collapse">
       <div class="panel-body">
+        <div class="row">
+          <div class="col-sm-6">
+            <img src="<%= attraction.image_url %>">
+          </div>
+          <div class="col-sm-6  col-sm-6-offset-2">
+            <h5>Nearby Attractions</h5>
+            <ul>
+              <% for location in attraction.nearbys(0.5) %>
+                <li> <%= location.title %>
+              <% end %>
+            </ul>
+          </div>
+        </div>
         <%= attraction.body %>
       </div>
     </div>
