@@ -1,0 +1,20 @@
+<% for attraction in attractions %>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <input type="checkbox" id=<%= "attraction_" + attraction.id.to_s %>
+        data-lat="<%= attraction.latitude %>" data-long="<%= attraction.longitude %>"
+        value="true">
+        <a data-toggle="collapse" data-parent="#accordion" href="<%= "#collapse_" + i.to_s %>">
+          <%= attraction.title %>
+        </a>
+      </h4>
+    </div>
+    <div id="<%= "collapse_" + i.to_s %>" class="panel-collapse collapse">
+      <div class="panel-body">
+        <%= attraction.body %>
+      </div>
+    </div>
+  </div>
+  <% i += 1 %>
+<% end %>

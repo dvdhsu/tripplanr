@@ -43,25 +43,34 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDDNUS-k1NvxtyV_2Q_xNIJ1H1
         <h2>Destinations</h2>
         <div class="attraction-list">
           <div class="panel-group" id="accordion">
-            <% for i in 1...@attractions.length %>
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                <h4 class="panel-title">
-                  <input type="checkbox" id=<%= "attraction_" + @attractions[i].id.to_s %>
-                  data-lat="<%= @attractions[i].latitude %>" data-long="<%= @attractions[i].longitude %>"
-                  value="true">
-                  <a data-toggle="collapse" data-parent="#accordion" href="<%= "#collapse_" + i.to_s %>">
-                    <%= @attractions[i].title %>
-                  </a>
-                </h4>
-              </div>
-              <div id="<%= "collapse_" + i.to_s %>" class="panel-collapse collapse">
-                <div class="panel-body">
-                  <%= @attractions[i].body %>
-                </div>
-              </div>
-            </div>
-            <% end %>
+            <% i = 0 %>
+            <h2>Landmarks</h2>
+              <% attractions = @city.attractions.where(tag: "landmark") %>
+              <%= render partial: "attractions_list", locals: {i: i, attractions: attractions} %>
+              <% i += attractions.length %>
+            <h2>Museums</h2>
+              <% attractions = @city.attractions.where(tag: "museum") %>
+              <%= render partial: "attractions_list", locals: {i: i, attractions: attractions} %>
+              <% i += attractions.length %>
+            <h2>Parks</h2>
+              <% attractions = @city.attractions.where(tag: "park") %>
+              <%= render partial: "attractions_list", locals: {i: i, attractions: attractions} %>
+              <% i += attractions.length %>
+            <h2>Shopping</h2>
+              <% attractions = @city.attractions.where(tag: "shopping") %>
+              <%= render partial: "attractions_list", locals: {i: i, attractions: attractions} %>
+              <% i += attractions.length %>
+            <h2>Airports</h2>
+              <% attractions = @city.attractions.where(tag: "airport") %>
+              <%= render partial: "attractions_list", locals: {i: i, attractions: attractions} %>
+              <% i += attractions.length %>
+            <h2>Train Stations</h2>
+              <% attractions = @city.attractions.where(tag: "train") %>
+              <%= render partial: "attractions_list", locals: {i: i, attractions: attractions} %>
+              <% i += attractions.length %>
+            <h2>Universities</h2>
+              <% attractions = @city.attractions.where(tag: "university") %>
+              <%= render partial: "attractions_list", locals: {i: i, attractions: attractions} %>
           </div>
         </div>
       </div>
