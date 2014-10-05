@@ -1,54 +1,91 @@
 <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 <%= stylesheet_link_tag "flatly" %>
 
+<script type="text/javascript"
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDDNUS-k1NvxtyV_2Q_xNIJ1H15kmhjEFM&libraries=places&sensor=false"></script>
+<script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/src/data.json"></script>
+<script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/src/markerclusterer_compiled.js"></script>
+
+
 <% title "City" %>
 
-
-
 <style type="text/css">
-  @import url(http://fonts.googleapis.com/css?family=Raleway:700);
+@import url(http://fonts.googleapis.com/css?family=Raleway:700);
 
 </style>
-<header class = "<%= @city %> jumbotron">
-<h1>
-  <%= @city.name %>
-</h1>
-  <p>
-    <form>Where are you staying?
-    <input type = "text" class = "form-control" id="address" name = "location" style="width: 50%; margin-bottom: 10px;">
-    <input type="submit" id="submit" class="button" name="Submit" onclick="codeAddress()"></form>
-  </p>
-    
-</header>
-
+  <div class="container">
+    <h1>
+      <%= @city.name %>
+    </h1>
+    <div class="initialInputs">
+      <div class="col-sm-6">
+        <label for="startPoint" class="control-label">Starting point: </label>
+        <input type="text" class="form-control" id="startPoint">
+      </div>
+      <div class="col-sm-6">
+        <label for="endPoint" class="control-label">Ending point: </label>
+        <input type="text" class="form-control" id="endPoint">
+      </div>
+    </div>
+  </div>
 
 <div class="main-container">
   <div class="col-sm-6 attractions">
-  <!-- panel.html.erb -->
+    <!-- panel.html.erb -->
 
   </div>
   <div class="col-sm-12 map">
-<!-- map.html.erb -->
-<style type="text/css">#map-canvas { height: 400px; margin: 0; padding: 0;}</style>
-  <script type="text/javascript"
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDDNUS-k1NvxtyV_2Q_xNIJ1H15kmhjEFM&libraries=places&sensor=false"></script>
-  <script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/src/data.json"></script>
-    <script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/src/markerclusterer_compiled.js"></script>
+    <!-- map.html.erb -->
+    <style type="text/css">#map-canvas { height: 400px; margin: 0; padding: 0;}</style>
+    <div id="map-canvas"></div>
 
-  <script type="text/javascript">
-
+    <div class="container">
+      <div class="col-sm-9 attractions">
+        <h2>Attractions</h2>
+        <div class="attraction-list">
+          <div class="panel-group" id="accordion">
+            <% for i in 1...@attractions.length %>
+              <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title">
+                  <input type="checkbox" id=<%= "attraction_" + @attractions[i].id.to_s %>
+                data-lat="<%= @attractions[i].latitude %>" data-long="<%= @attractions[i].longitude %>"
+                  value="true">
+                  <a data-toggle="collapse" data-parent="#accordion" href="<%= "#collapse_" + i.to_s %>">
+                    <%= @attractions[i].title %>
+                  </a>
+                </h4>
+              </div>
+              <div id="<%= "collapse_" + i.to_s %>" class="panel-collapse collapse">
+                <div class="panel-body">
+                  <%= @attractions[i].body %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <h2>Calculations</h2>
+        <p>Estimated Time:</p>
+        <p>Cost:</p>
+      </div>
+    </div>
+</div></div>
+<script>
   var geocoder;
   var map;
-      function initialize() {
-          geocoder = new google.maps.Geocoder();
+  function initialize() {
+    geocoder = new google.maps.Geocoder();
 
-        var center = new google.maps.LatLng("<%= @city.latitude %> ", "<%= @city.longitude %>");
+    var center = new google.maps.LatLng("<%= @city.latitude %> ", "<%= @city.longitude %>");
 
-        map = new google.maps.Map(document.getElementById('map-canvas'), {
-          zoom: 12,
-          center: center,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
-        });
+    map = new google.maps.Map(document.getElementById('map-canvas'), {
+      zoom: 12,
+      center: center,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    });
 
 //   var markers = [];
 //   var list = $(".attraction-list .panel-group input");
@@ -61,7 +98,7 @@
 //                 title: $(input).attr("title"),
 //                 position: latLng
 //           });
-    
+
 //     markers.push(marker); 
 //     google.maps.event.addListener(markers[i], 'click', (function(marker, i) {
 //         return function() {
@@ -75,91 +112,54 @@ var id;
 
 var markers = {};
 
-    $(":checkbox").change(function() {
-      if (($(this)).is(':checked')) {
-        // add it
-        console.log($(this) + "checked")
-        var latLng = new google.maps.LatLng($(this).attr("data-lat"),
-                  $(this).attr("data-long"));
-        var marker = new google.maps.Marker({
-                  map: map,
-                  position: latLng
-            });
-        map.panTo(latLng);
+$(":checkbox").change(function() {
+  if (($(this)).is(':checked')) {
+    // add it
+    console.log($(this) + "checked")
+    var latLng = new google.maps.LatLng($(this).attr("data-lat"),
+      $(this).attr("data-long"));
+    var marker = new google.maps.Marker({
+      map: map,
+      position: latLng
+    });
     id = $(this).attr("id");
     markers[id] = marker; 
     console.log(markers);
     google.maps.event.addListener(marker, 'click', (function() {
-        return function() {
-          infowindow.setContent($(this).next().text());
-          infowindow.open(map, marker);
-        }
-      }));
+      return function() {
+        infowindow.setContent($(this).next().text());
+        infowindow.open(map, marker);
       }
-      else {
-        //remove it 
-        console.log($(this) + "unchecked")
-        id = $(this).attr("id");        
-        marker = markers[id]; 
-        marker.setMap(null);
-        console.log(markers);
+    }));
+  }
+  else {
+  //remove it 
+  console.log($(this) + "unchecked")
+  id = $(this).attr("id");        
+  marker = markers[id]; 
+  marker.setMap(null);
+  console.log(markers);
 
-      }
-    }) ;
+}
+}) ;
 var mcOptions = {gridSize: 50, maxZoom: 15};
 
-        var markerCluster = new MarkerClusterer(map, markers, mcOptions);
+var markerCluster = new MarkerClusterer(map, markers, mcOptions);
 
-      }
-      function codeAddress() {
-      var address = document.getElementById('address').value;
-      geocoder.geocode( { 'address': address}, function(results, status) {
-        if (status == google.maps.GeocoderStatus.OK) {
-          map.setCenter(results[0].geometry.location);
-          var marker = new google.maps.Marker({
-              position: results[0].geometry.location
-          });
-        } else {
-          alert('Geocode was not successful: ' + status);
-        }
+}
+function codeAddress() {
+  var address = document.getElementById('address').value;
+  geocoder.geocode( { 'address': address}, function(results, status) {
+    if (status == google.maps.GeocoderStatus.OK) {
+      map.setCenter(results[0].geometry.location);
+      var marker = new google.maps.Marker({
+        position: results[0].geometry.location
       });
+    } else {
+      alert('Geocode was not successful: ' + status);
     }
-      google.maps.event.addDomListener(window, 'load', initialize);
+  });
+}
+google.maps.event.addDomListener(window, 'load', initialize);
 
-    </script>
-<div id="map-canvas"></div>
-
-<div class="container">
-  <div class="col-sm-9 attractions">
-    <h2>Attractions</h2>
-    <div class="attraction-list">
-      <div class="panel-group" id="accordion">
-        <% for i in 1...@attractions.length %>
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <h4 class="panel-title">
-                <input type="checkbox" id=<%= "attraction_" + @attractions[i].id.to_s %>
-                  data-lat="<%= @attractions[i].latitude %>" data-long="<%= @attractions[i].longitude %>"
-                  value="true">
-                <a data-toggle="collapse" data-parent="#accordion" href="<%= "#collapse_" + i.to_s %>">
-                  <%= @attractions[i].title %>
-                </a>
-              </h4>
-            </div>
-            <div id="<%= "collapse_" + i.to_s %>" class="panel-collapse collapse">
-              <div class="panel-body">
-                <%= @attractions[i].body %>
-              </div>
-            </div>
-          </div>
-        <% end %>
-      </div>
-    </div>
-  </div>
-  <div class="col-sm-3">
-    <h2>Calculations</h2>
-    <p>Estimated Time:</p>
-    <p>Cost:</p>
-  </div>
-</div>
-</div></div>
+</script>
